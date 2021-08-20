@@ -1,0 +1,40 @@
+{
+    "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": true
+    },
+    "workbench.iconTheme": "material-icon-theme",
+    "editor.rulers": [
+        80,
+        120
+    ],
+    "editor.renderLineHighlight": "gutter",
+    "editor.formatOnPaste": true,
+    "editor.formatOnType": true,
+    "formattingToggle.affects": [
+        "formatOnSave"
+    ],
+    "terminal.integrated.fontSize": 14,
+    "material-icon-theme.activeIconPack": "nest",
+    "material-icon-theme.folders.associations": {
+        "entities": "class",
+        "schemas": "class",
+        "typeorm": "database",
+        "repositories": "mappings",
+        "http": "container",
+        "migrations": "tools",
+        "modules": "components",
+        "implementations": "core",
+        "websockets": "pipe"
+    },
+    "material-icon-theme.files.associations": {
+        "ormconfig.json": "database",
+        "tsconfig.json": "tune"
+    },
+    "emmet.syntaxProfiles": {
+        "javascript": "jsx"
+    },
+    "emmet.includeLanguages": {
+        "javascript": "javascriptreact"
+    },
+    "workbench.colorTheme": "Dracula"
+}
