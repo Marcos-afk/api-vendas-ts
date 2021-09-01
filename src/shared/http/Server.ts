@@ -7,6 +7,7 @@ import dotenv from 'dotenv';
 import Routes from '../http/routes/index';
 import ErrorApp from '@shared/errors/ErrorApp';
 import '@shared/typeorm';
+import uploadsConfig from '@config/upload';
 
 const app = express();
 dotenv.config();
@@ -14,6 +15,7 @@ dotenv.config();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
+app.use('/files', express.static(uploadsConfig.directory));
 
 app.use('/api', Routes);
 
