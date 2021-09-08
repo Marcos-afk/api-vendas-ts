@@ -1,7 +1,7 @@
 import ErrorApp from '@shared/errors/ErrorApp';
 import { getCustomRepository } from 'typeorm';
 import Product from '../typeorm/entities/Product';
-import { ProductsRepository } from '../typeorm/repositories/ProductsRepository';
+import ProductsRepository from '../typeorm/repositories/ProductsRepository';
 
 interface IRequest {
   id: string;
@@ -27,7 +27,7 @@ export default class UpdateProductService {
 
     const isExisting = await productsRepository.findByName(name);
     if (isExisting && isExisting.name !== product.name) {
-      throw new ErrorApp('Um produto com este nome já existe no sistema!', 406);
+      throw new ErrorApp('Um produto com este nome já existe no sistema!', 400);
     }
 
     product.name = name;

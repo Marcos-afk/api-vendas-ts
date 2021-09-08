@@ -2,7 +2,7 @@ import ErrorApp from '@shared/errors/ErrorApp';
 import path from 'path';
 import { getCustomRepository } from 'typeorm';
 import User from '../typeorm/entities/User';
-import { UsersRepository } from '../typeorm/repositories/UsersRepository';
+import UsersRepository from '../typeorm/repositories/UsersRepository';
 import uploadConfig from '@config/upload';
 import fs from 'fs';
 

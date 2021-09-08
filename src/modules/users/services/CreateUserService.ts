@@ -2,7 +2,7 @@ import ErrorApp from '@shared/errors/ErrorApp';
 import { hash } from 'bcrypt';
 import { getCustomRepository } from 'typeorm';
 import User from '../typeorm/entities/User';
-import { UsersRepository } from '../typeorm/repositories/UsersRepository';
+import UsersRepository from '../typeorm/repositories/UsersRepository';
 
 interface IRequest {
   name: string;
@@ -15,7 +15,7 @@ export default class CreateUserService {
     const usersRepository = getCustomRepository(UsersRepository);
     const isExisting = await usersRepository.findByEmail(email);
     if (isExisting) {
-      throw new ErrorApp('Email inválido!', 406);
+      throw new ErrorApp('Email inválido!', 400);
     }
 
     const hashPassword = await hash(password, 8);

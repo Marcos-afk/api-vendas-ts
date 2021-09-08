@@ -1,0 +1,74 @@
+Arguments: 
+  C:\Program Files\nodejs\node.exe C:\Users\SPA\AppData\Roaming\npm\node_modules\yarn\bin\yarn.js add date-fns
+
+PATH: 
+  C:\Python39\Scripts\;C:\Python39\;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\Program Files\nodejs\;C:\ProgramData\chocolatey\bin;C:\Program Files\dotnet\;C:\Program Files\Microsoft SQL Server\130\Tools\Binn\;C:\Program Files\Microsoft SQL Server\Client SDK\ODBC\170\Tools\Binn\;C:\Program Files (x86)\Microsoft SQL Server\150\Tools\Binn\;C:\Program Files\Microsoft SQL Server\150\Tools\Binn\;C:\Program Files\Microsoft SQL Server\150\DTS\Binn\;C:\Program Files (x86)\Microsoft SQL Server\150\DTS\Binn\;C:\Program Files\Azure Data Studio\bin;C:\WINDOWS\System32\OpenSSH\;C:\Program Files\Docker\Docker\resources\bin;C:\ProgramData\DockerDesktop\version-bin;C:\Program Files\Git\cmd;C:\Program Files\MySQL\MySQL Shell 8.0\bin\;C:\Users\SPA\AppData\Local\Microsoft\WindowsApps;C:\Users\SPA\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\SPA\AppData\Roaming\npm;C:\Users\SPA\.dotnet\tools;C:\Program Files\Azure Data Studio\bin;C:\intelFPGA_lite\16.1\modelsim_ase\win32aloem;C:\Program Files\MongoDB\Server\5.0\bin;C:\Users\SPA\AppData\Local\GitHubDesktop\bin
+
+Yarn version: 
+  1.22.11
+
+Node version: 
+  14.17.3
+
+Platform: 
+  win32 x64
+
+Trace: 
+  Error: EPERM: operation not permitted, unlink 'C:\Users\SPA\Documents\Node.js\api-vendas\node_modules\bcrypt\lib\binding\napi-v3\bcrypt_lib.node'
+
+npm manifest: 
+  {
+    "name": "api-vendas",
+    "version": "1.0.0",
+    "description": "",
+    "main": "Server.ts",
+    "scripts": {
+      "test": "echo \"Error: no test specified\" && exit 1",
+      "dev": "ts-node-dev -r tsconfig-paths/register --inspect --transpile-only --ignore-watch node_modules src/shared/http/Server.ts",
+      "lint": "eslint . --ext .ts",
+      "lint-fix": "eslint . --ext .ts --fix",
+      "typeorm": "ts-node-dev ./node_modules/typeorm/cli.js"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "devDependencies": {
+      "@types/bcrypt": "^5.0.0",
+      "@types/cors": "^2.8.12",
+      "@types/express": "^4.17.13",
+      "@types/joi": "^17.2.3",
+      "@types/jsonwebtoken": "^8.5.5",
+      "@types/multer": "^1.4.7",
+      "@types/node": "^16.4.13",
+      "@typescript-eslint/eslint-plugin": "^4.29.1",
+      "@typescript-eslint/parser": "^4.29.1",
+      "eslint": "^7.32.0",
+      "eslint-config-prettier": "6.15.0",
+      "eslint-plugin-prettier": "3.2.0",
+      "prettier": "^2.3.2",
+      "ts-node-dev": "^1.1.8",
+      "tsconfig-paths": "^3.10.1",
+      "typescript": "^4.3.5"
+    },
+    "dependencies": {
+      "bcrypt": "^5.0.1",
+      "celebrate": "^15.0.0",
+      "cors": "^2.8.5",
+      "dotenv": "^10.0.0",
+      "express": "^4.17.1",
+      "express-async-errors": "^3.1.1",
+      "install": "^0.13.0",
+      "jsonwebtoken": "^8.5.1",
+      "multer": "^1.4.3",
+      "npm": "^7.20.5",
+      "pg": "^8.7.1",
+      "reflect-metadata": "^0.1.13",
+      "typeorm": "^0.2.36"
+    }
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile
