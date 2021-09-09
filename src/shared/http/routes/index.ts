@@ -7,9 +7,9 @@ import { Router } from 'express';
 
 const Routes = Router();
 
-Routes.use('/produtos', productsRoute);
-Routes.use('/usuarios', usersRouter);
-Routes.use('/sessoes', sessionsRouter);
+Routes.use('/products', productsRoute);
+Routes.use('/users', usersRouter);
+Routes.use('/sessions', sessionsRouter);
 Routes.use('/password', PasswordRouter);
 
 export default Routes;

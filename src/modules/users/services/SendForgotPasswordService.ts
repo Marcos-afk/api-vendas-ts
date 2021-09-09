@@ -1,3 +1,4 @@
+import EmailConfig from '@config/email';
 import ErrorApp from '@shared/errors/ErrorApp';
 import { getCustomRepository } from 'typeorm';
 import UsersRepository from '../typeorm/repositories/UsersRepository';
@@ -17,6 +18,15 @@ export default class SendForgotPasswordService {
     }
 
     const token = await usersTokenRepository.generate(user.id);
-    console.log(token);
+    const EmailService = new EmailConfig();
+    EmailService.to = email;
+    EmailService.subject = 'Alteração de senha';
+    EmailService.html = `<div>
+        <p> Olá ${user.name}, segue abaixo as informções de como alterar sua senha.</p>
+        <p> Solicitação de mudança de senha recebida : ${token?.token}.</p>
+        <p> Clique no link para continuar <a href=${process.env.URL_NEW_PASSWORD}/${token?.token}>Clique aqui</a></p>
+        <p> Obs : O token acima irá expirar em duas horas com base no horário em que o mesmo foi entregue.</p>
+        </div>`;
+    EmailService.sendEmail();
   }
 }

@@ -31,6 +31,8 @@ export default function isAuth(
     };
     return next();
   } catch (error) {
-    throw new ErrorApp('Erro : ' + error.message, 500);
+    if (error instanceof Error) {
+      throw new ErrorApp('Error: ' + error.message);
+    }
   }
 }
