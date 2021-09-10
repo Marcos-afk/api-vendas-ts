@@ -11,7 +11,7 @@ export default class ShowProductService {
     const productsRepository = getCustomRepository(ProductsRepository);
     const product = await productsRepository.findOne(id);
     if (!product) {
-      throw new ErrorApp('Produto com este id não encontrado!');
+      throw new ErrorApp('Id inválido!');
     }
 
     return product;

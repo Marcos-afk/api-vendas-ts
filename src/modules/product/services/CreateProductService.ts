@@ -20,7 +20,7 @@ export default class CreateProductService {
 
     const isExisting = await productsRepository.findByName(name);
     if (isExisting) {
-      throw new ErrorApp('Um produto com este nome já existe no sistema!', 400);
+      throw new ErrorApp('Nome inválido!', 400);
     }
 
     const product = productsRepository.create({

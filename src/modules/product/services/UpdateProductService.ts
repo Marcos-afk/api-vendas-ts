@@ -22,12 +22,12 @@ export default class UpdateProductService {
 
     const product = await productsRepository.findOne(id);
     if (!product) {
-      throw new ErrorApp('Produto com este id não encontrado!');
+      throw new ErrorApp('Id inválido!');
     }
 
     const isExisting = await productsRepository.findByName(name);
     if (isExisting && isExisting.name !== product.name) {
-      throw new ErrorApp('Um produto com este nome já existe no sistema!', 400);
+      throw new ErrorApp('Nome inválido!', 400);
     }
 
     product.name = name;

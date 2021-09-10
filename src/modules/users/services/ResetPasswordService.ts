@@ -33,7 +33,7 @@ export default class ResetPasswordService {
     const compareDate = addHours(tokenCreatedAt, 2);
 
     if (isAfter(Date.now(), compareDate)) {
-      throw new ErrorApp('Token expirado!');
+      throw new ErrorApp('Token expirado!', 400);
     }
 
     user.password = await hash(password, 8);
