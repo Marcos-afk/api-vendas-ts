@@ -1,5 +1,6 @@
 /*Declaração de variáveis */
 import customerRouter from '@modules/customers/routes/CustomerRoutes';
+import ordersRouter from '@modules/orders/routes/OrdersRouter';
 import productsRouter from '@modules/product/Routes/ProductsRoutes';
 import PasswordRouter from '@modules/users/Routes/PasswordRoutes';
 import ProfileRouter from '@modules/users/Routes/ProfileRoutes';
@@ -15,5 +16,6 @@ Routes.use('/sessions', sessionsRouter);
 Routes.use('/password', PasswordRouter);
 Routes.use('/profile', ProfileRouter);
 Routes.use('/customers', customerRouter);
+Routes.use('/orders', ordersRouter);
 
 export default Routes;

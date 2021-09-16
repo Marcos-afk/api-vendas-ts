@@ -23,7 +23,7 @@ export default class Product {
   amount: number;
 
   @OneToMany(() => OrdersProducts, order_products => order_products.product)
-  orders: OrdersProducts[];
+  orders_products: OrdersProducts[];
 
   @Column()
   description: string;
