@@ -1,20 +1,22 @@
 import { Router } from 'express';
 import ProductsControllers from '../controllers/ProductsControllers';
 import { celebrate, Joi, Segments } from 'celebrate';
-
+import isAuth from '@shared/http/middlewares/isAuth';
 const productsRouter = Router();
 const productsController = new ProductsControllers();
 
-productsRouter.get('/', productsController.index);
+productsRouter.get('/', isAuth, productsController.index);
 
 productsRouter.get(
   '/:id',
+  isAuth,
   celebrate({ [Segments.PARAMS]: { id: Joi.string().uuid().required() } }),
   productsController.show,
 );
 
 productsRouter.post(
   '/',
+  isAuth,
   celebrate({
     [Segments.BODY]: {
       name: Joi.string().required(),
@@ -27,6 +29,7 @@ productsRouter.post(
 );
 productsRouter.put(
   '/:id',
+  isAuth,
   celebrate({
     [Segments.BODY]: {
       name: Joi.string().required(),
@@ -41,6 +44,7 @@ productsRouter.put(
 
 productsRouter.delete(
   '/:id',
+  isAuth,
   celebrate({ [Segments.PARAMS]: { id: Joi.string().uuid().required() } }),
   productsController.delete,
 );
