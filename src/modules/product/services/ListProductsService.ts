@@ -1,6 +1,7 @@
 import { getCustomRepository } from 'typeorm';
 import Product from '../typeorm/entities/Product';
 import ProductsRepository from '../typeorm/repositories/ProductsRepository';
+import RedisCache from '@shared/cache/RedisCache';
 
 interface IRequest {
   from: number;
@@ -16,9 +17,14 @@ interface IRequest {
 export default class ListProductsService {
   public async execute(): Promise<IRequest> {
     const productsRepository = getCustomRepository(ProductsRepository);
+
+    const redisCache = new RedisCache();
+
     const products = await productsRepository
       .createQueryBuilder('products')
       .paginate();
+
+    await redisCache.save('teste', 'teste');
     return products as IRequest;
   }
 }
