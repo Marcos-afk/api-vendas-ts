@@ -1,3 +1,4 @@
+import RedisCache from '@shared/cache/RedisCache';
 import ErrorApp from '@shared/errors/ErrorApp';
 import { getCustomRepository } from 'typeorm';
 import Product from '../typeorm/entities/Product';
@@ -23,6 +24,8 @@ export default class CreateProductService {
       throw new ErrorApp('Nome inválido!', 400);
     }
 
+    const redisCache = new RedisCache();
+
     const product = productsRepository.create({
       name,
       price,
@@ -30,6 +33,7 @@ export default class CreateProductService {
       description,
     });
 
+    await redisCache.invalidate('api-vendas-products');
     await productsRepository.save(product);
     return product;
   }

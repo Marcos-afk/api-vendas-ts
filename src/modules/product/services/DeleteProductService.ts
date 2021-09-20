@@ -1,3 +1,4 @@
+import RedisCache from '@shared/cache/RedisCache';
 import ErrorApp from '@shared/errors/ErrorApp';
 import { getCustomRepository } from 'typeorm';
 import ProductsRepository from '../typeorm/repositories/ProductsRepository';
@@ -13,6 +14,8 @@ export default class DeleteProductService {
     if (!product) {
       throw new ErrorApp('Id inválido!');
     }
+    const redisCache = new RedisCache();
+    await redisCache.invalidate('api-vendas-products');
     await productsRepository.remove(product);
   }
 }
