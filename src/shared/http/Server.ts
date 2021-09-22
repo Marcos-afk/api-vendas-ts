@@ -10,13 +10,15 @@ import Routes from '../http/routes/index';
 import ErrorApp from '@shared/errors/ErrorApp';
 import '@shared/typeorm';
 import uploadsConfig from '@config/upload';
-
+import ratelimiter from './middlewares/rateLimiter';
 const app = express();
 dotenv.config();
 
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cors());
+app.use(ratelimiter);
+
 app.use(pagination);
 app.use('/files', express.static(uploadsConfig.directory));
 
