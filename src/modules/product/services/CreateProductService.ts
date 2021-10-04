@@ -24,8 +24,6 @@ export default class CreateProductService {
       throw new ErrorApp('Nome inválido!', 400);
     }
 
-    const redisCache = new RedisCache();
-
     const product = productsRepository.create({
       name,
       price,
@@ -33,7 +31,7 @@ export default class CreateProductService {
       description,
     });
 
-    await redisCache.invalidate('api-vendas-products');
+    await RedisCache.invalidate('api-vendas-products');
     await productsRepository.save(product);
     return product;
   }

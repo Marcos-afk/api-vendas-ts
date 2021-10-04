@@ -10,7 +10,7 @@ if (!process.env.REDIS_HOST) {
 
 const redisHost = process.env.REDIS_HOST;
 
-export default class RedisCache {
+class RedisCache {
   private client: RedisClient;
 
   constructor() {
@@ -41,3 +41,5 @@ export default class RedisCache {
     await this.client.del(key);
   }
 }
+
+export default new RedisCache();

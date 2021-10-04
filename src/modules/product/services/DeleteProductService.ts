@@ -14,8 +14,8 @@ export default class DeleteProductService {
     if (!product) {
       throw new ErrorApp('Id inválido!');
     }
-    const redisCache = new RedisCache();
-    await redisCache.invalidate('api-vendas-products');
+
+    await RedisCache.invalidate('api-vendas-products');
     await productsRepository.remove(product);
   }
 }
