@@ -3,13 +3,22 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 
 import Redis, { Redis as RedisClient } from 'ioredis';
-import cacheConfig from '@config/cache/cache';
+
+if (!process.env.REDIS_HOST) {
+  process.exit(1);
+}
+
+const redisHost = process.env.REDIS_HOST;
 
 export default class RedisCache {
   private client: RedisClient;
 
   constructor() {
-    this.client = new Redis(cacheConfig.config.redis);
+    this.client = new Redis(redisHost, {
+      tls: {
+        rejectUnauthorized: false,
+      },
+    });
   }
 
   public async save(key: string, value: any): Promise<void> {
