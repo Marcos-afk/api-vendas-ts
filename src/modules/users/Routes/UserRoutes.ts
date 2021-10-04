@@ -9,7 +9,7 @@ import isAuth from '../../../shared/http/middlewares/isAuth';
 const usersRouter = Router();
 const usersController = new UsersController();
 const usersAvatarController = new UsersAvatarController();
-const upload = multer(uploadConfig.multer);
+const upload = multer(uploadConfig);
 
 usersRouter.get('/', isAuth, usersController.index);
 usersRouter.post(

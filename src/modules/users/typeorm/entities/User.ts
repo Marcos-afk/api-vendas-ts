@@ -35,6 +35,6 @@ export default class User {
     if (!this.avatar) {
       return null;
     }
-    return `${process.env.AVATAR_URL}/${this.avatar}`;
+    return `http://localhost:${process.env.PORT}/files/${this.avatar}`;
   }
 }

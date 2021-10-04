@@ -14,11 +14,6 @@
     ],
     "rules": {
         "no-console": "warn",
-        "prettier/prettier": [
-            "error",
-            {
-                "endOfLine": "auto"
-            }
-        ]
+        "prettier/prettier": "error"
     }
 }
