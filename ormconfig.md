@@ -7,12 +7,12 @@
 "username" : "postgres",
 "password" : "aqui vem sua senha",
 "database" : "api-vendas",
-"entities": ["./src/modules/**/typeorm/entities/*.ts"],
+"entities": ["./src/modules/**/infra/typeorm/entities/*.ts"],
 "migrations": [
-"./src/shared/typeorm/migrations/*.ts"
+"./src/shared/infra/typeorm/migrations/*.ts"
 ],
 "cli": {
-"migrationsDir": "./src/shared/typeorm/migrations"
+"migrationsDir": "./src/shared/infra/typeorm/migrations"
 }
 }
 
@@ -26,11 +26,11 @@
   "username": "postgres",
   "password": "aqui vem sua senha",
   "database": "api-vendas",
-  "entities": ["./dist/modules/**/typeorm/entities/*.js"],
+  "entities": ["./src/modules/**/infra/typeorm/entities/*.js"],
   "migrations": [
-    "./dist/shared/typeorm/migrations/*.js"
+  "./src/shared/infra/typeorm/migrations/*.js"
   ],
   "cli": {
-    "migrationsDir": "./dist/shared/typeorm/migrations"
-  }
+  "migrationsDir": "./src/shared/infra/typeorm/migrations"
+ }
 }
