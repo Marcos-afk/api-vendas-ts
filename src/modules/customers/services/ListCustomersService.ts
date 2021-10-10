@@ -1,25 +1,20 @@
-import { getCustomRepository } from 'typeorm';
-import Customer from '../infra/typeorm/entities/Customer';
-import CustomerRepository from '../infra/typeorm/repositories/CustomerRepository';
+import { ICustomer } from '../domain/models/ICustomer';
+import { ICustomersRepository } from '../domain/repositories/ICustomersRepository';
+import { inject, injectable } from 'tsyringe';
+import ErrorApp from 'dist/shared/errors/ErrorApp';
 
-interface IRequest {
-  from: number;
-  to: number;
-  per_page: number;
-  total: number;
-  current_page: number;
-  prev_page: number | null;
-  next_page: number | null;
-  last_page: number;
-  data: Customer[];
-}
-
+@injectable()
 export default class ListCustomersService {
-  public async execute(): Promise<IRequest> {
-    const customerRepository = getCustomRepository(CustomerRepository);
-    const customers = await customerRepository
-      .createQueryBuilder('customers')
-      .paginate();
-    return customers as IRequest;
+  constructor(
+    @inject('CustomersRepository')
+    private customersRepository: ICustomersRepository,
+  ) {}
+  public async execute(): Promise<ICustomer[] | undefined> {
+    const customers = await this.customersRepository.find();
+    if (customers && customers.length < 1) {
+      throw new ErrorApp('Lista de clientes vazia!');
+    }
+
+    return customers;
   }
 }

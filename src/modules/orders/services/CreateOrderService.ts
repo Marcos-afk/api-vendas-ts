@@ -1,31 +1,39 @@
-import CustomerRepository from '@modules/customers/infra/typeorm/repositories/CustomerRepository';
-import ProductsRepository from '@modules/product/infra/typeorm/repositories/ProductsRepository';
 import ErrorApp from '@shared/errors/ErrorApp';
-import { getCustomRepository } from 'typeorm';
-import Order from '../infra/typeorm/entities/Order';
-import OrdersRepository from '../infra/typeorm/repositories/OrdersRepository';
+import { inject, injectable } from 'tsyringe';
+import { IOrdersRepository } from '../domain/repositories/IOrdersRepository';
+import { ICustomersRepository } from '@modules/customers/domain/repositories/ICustomersRepository';
+import { IProductRepository } from '@modules/product/domain/repositories/IProductRepository';
+import { IRequestCreateOrder } from '../domain/models/IRequestCreateOrder';
+import { IOrder } from '../domain/models/IOrder';
+import RedisCache from '@shared/cache/RedisCache';
 
-interface IProduct {
-  id: string;
-  amount: number;
-}
-interface IRequest {
-  customer_id: string;
-  products: IProduct[];
-}
-
+@injectable()
 export default class CreateOrderService {
-  public async execute({ customer_id, products }: IRequest): Promise<Order> {
-    const ordersRepository = getCustomRepository(OrdersRepository);
-    const customersRepository = getCustomRepository(CustomerRepository);
-    const productsRepository = getCustomRepository(ProductsRepository);
+  constructor(
+    @inject('OrdersRepository')
+    private ordersRepository: IOrdersRepository,
 
-    const customerIsExist = await customersRepository.findById(customer_id);
+    @inject('CustomersRepository')
+    private customersRepository: ICustomersRepository,
+
+    @inject('ProductsRepository')
+    private productsRepository: IProductRepository,
+  ) {}
+  public async execute({
+    customer_id,
+    products,
+  }: IRequestCreateOrder): Promise<IOrder> {
+    const customerIsExist = await this.customersRepository.findById(
+      customer_id,
+    );
     if (!customerIsExist) {
       throw new ErrorApp('Id de cliente inválido');
     }
 
-    const productsISExist = await productsRepository.findAllById(products);
+    const productsISExist = await this.productsRepository.findAllByIds(
+      products,
+    );
+
     if (!productsISExist.length) {
       throw new ErrorApp('Ids inválidos');
     }
@@ -60,7 +68,7 @@ export default class CreateOrderService {
       price: productsISExist.filter(p => p.id === product.id)[0].price,
     }));
 
-    const order = await ordersRepository.createOrder({
+    const order = await this.ordersRepository.create({
       customer: customerIsExist,
       products: serializedProduct,
     });
@@ -74,7 +82,8 @@ export default class CreateOrderService {
         product.amount,
     }));
 
-    await productsRepository.save(updateAmount);
+    await RedisCache.invalidate('api-vendas-products');
+    await this.productsRepository.updateStock(updateAmount);
     return order;
   }
 }

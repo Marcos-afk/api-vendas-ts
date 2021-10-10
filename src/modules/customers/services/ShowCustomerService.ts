@@ -1,15 +1,17 @@
-import { getCustomRepository } from 'typeorm';
 import ErrorApp from '@shared/errors/ErrorApp';
-import Customer from '../infra/typeorm/entities/Customer';
-import CustomerRepository from '../infra/typeorm/repositories/CustomerRepository';
+import { ICustomer } from '../domain/models/ICustomer';
+import { ICustomersRepository } from '../domain/repositories/ICustomersRepository';
+import { inject, injectable } from 'tsyringe';
+import { IFindCustomer } from '../domain/models/IFindCustomer';
 
-interface IRequest {
-  id: string;
-}
+@injectable()
 export default class ShowCustomerService {
-  public async execute({ id }: IRequest): Promise<Customer> {
-    const customerRepository = getCustomRepository(CustomerRepository);
-    const customer = await customerRepository.findById(id);
+  constructor(
+    @inject('CustomersRepository')
+    private customersRepository: ICustomersRepository,
+  ) {}
+  public async execute({ id }: IFindCustomer): Promise<ICustomer> {
+    const customer = await this.customersRepository.findById(id);
     if (!customer) {
       throw new ErrorApp('Id inválido');
     }

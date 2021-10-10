@@ -1,20 +1,21 @@
 import ErrorApp from '@shared/errors/ErrorApp';
-import { getCustomRepository } from 'typeorm';
-import UsersRepository from '../infra/typeorm/repositories/UsersRepository';
-import UserTokensRepository from '../infra/typeorm/repositories/UserTokenRepository';
 import { hash } from 'bcrypt';
 import { isAfter, addHours } from 'date-fns';
+import { inject, injectable } from 'tsyringe';
+import { IUsersRepository } from '../domain/repositories/IUsersRepository';
+import { IResetPassword } from '../domain/models/IResetPassword';
+import { IUserTokensRepository } from '../domain/repositories/IUserTokensRepository';
 
-interface IRequest {
-  token: string;
-  password: string;
-}
-
+@injectable()
 export default class ResetPasswordService {
-  public async execute({ token, password }: IRequest): Promise<void> {
-    const usersRepository = getCustomRepository(UsersRepository);
-    const usersTokenRepository = getCustomRepository(UserTokensRepository);
-    const userToken = await usersTokenRepository.findByToken(token);
+  constructor(
+    @inject('UsersRepository')
+    private usersRepository: IUsersRepository,
+    @inject('UserTokensRepository')
+    private userTokensRepository: IUserTokensRepository,
+  ) {}
+  public async execute({ token, password }: IResetPassword): Promise<void> {
+    const userToken = await this.userTokensRepository.findByToken(token);
 
     if (!userToken) {
       throw new ErrorApp('Token inválido!');
@@ -24,7 +25,7 @@ export default class ResetPasswordService {
       throw new ErrorApp('Token de usuário inválido!');
     }
 
-    const user = await usersRepository.findById(userToken.user_id);
+    const user = await this.usersRepository.findById(userToken.user_id);
     if (!user) {
       throw new ErrorApp('Token de usuário inválido!');
     }
@@ -37,6 +38,6 @@ export default class ResetPasswordService {
     }
 
     user.password = await hash(password, 8);
-    await usersRepository.save(user);
+    await this.usersRepository.save(user);
   }
 }

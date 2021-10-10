@@ -1,31 +1,29 @@
-import { getCustomRepository } from 'typeorm';
-import User from '../infra/typeorm/entities/User';
-import UsersRepository from '../infra/typeorm/repositories/UsersRepository';
 import ErrorApp from '@shared/errors/ErrorApp';
 import { compare, hash } from 'bcrypt';
+import { inject, injectable } from 'tsyringe';
+import { IUsersRepository } from '../domain/repositories/IUsersRepository';
+import { IUpdateProfile } from '../domain/models/IUpdateProfile';
+import { IUser } from '../domain/models/IUser';
 
-interface IRequest {
-  user_id: string;
-  name: string;
-  email: string;
-  newPassword?: string;
-  oldPassword?: string;
-}
+@injectable()
 export default class UpdateProfileService {
+  constructor(
+    @inject('UsersRepository')
+    private usersRepository: IUsersRepository,
+  ) {}
   public async execute({
     user_id,
     name,
     email,
     newPassword,
     oldPassword,
-  }: IRequest): Promise<User> {
-    const usersRepository = getCustomRepository(UsersRepository);
-    const user = await usersRepository.findById(user_id);
+  }: IUpdateProfile): Promise<IUser> {
+    const user = await this.usersRepository.findById(user_id);
     if (!user) {
       throw new ErrorApp('Id inválido');
     }
 
-    const emailIsExist = await usersRepository.findByEmail(email);
+    const emailIsExist = await this.usersRepository.findByEmail(email);
     if (emailIsExist && emailIsExist.email !== user.email) {
       throw new ErrorApp('Email inválido!', 400);
     }
@@ -49,7 +47,7 @@ export default class UpdateProfileService {
 
     user.name = name;
     user.email = email;
-    await usersRepository.save(user);
+    await this.usersRepository.save(user);
     return user;
   }
 }

@@ -6,6 +6,8 @@ import isAuth from '@shared/infra/http/middlewares/isAuth';
 const ordersRouter = Router();
 const ordersController = new OrdersControllers();
 
+ordersRouter.get('/', isAuth, ordersController.get);
+
 ordersRouter.get(
   '/:id',
   isAuth,

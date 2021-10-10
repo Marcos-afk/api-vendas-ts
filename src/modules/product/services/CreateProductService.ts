@@ -1,38 +1,34 @@
 import RedisCache from '@shared/cache/RedisCache';
 import ErrorApp from '@shared/errors/ErrorApp';
-import { getCustomRepository } from 'typeorm';
-import Product from '../infra/typeorm/entities/Product';
-import ProductsRepository from '../infra/typeorm/repositories/ProductsRepository';
-interface IRequest {
-  name: string;
-  price: number;
-  amount: number;
-  description: string;
-}
+import { ICreateProduct } from '../domain/models/ICreateProduct';
+import { inject, injectable } from 'tsyringe';
+import { IProductRepository } from '../domain/repositories/IProductRepository';
+import { IProduct } from '../domain/models/IProduct';
 
+@injectable()
 export default class CreateProductService {
+  constructor(
+    @inject('ProductsRepository')
+    private productsRepository: IProductRepository,
+  ) {}
   public async execute({
     name,
     price,
     amount,
     description,
-  }: IRequest): Promise<Product> {
-    const productsRepository = getCustomRepository(ProductsRepository);
-
-    const isExisting = await productsRepository.findByName(name);
+  }: ICreateProduct): Promise<IProduct> {
+    const isExisting = await this.productsRepository.findByName(name);
     if (isExisting) {
       throw new ErrorApp('Nome inválido!', 400);
     }
 
-    const product = productsRepository.create({
+    await RedisCache.invalidate('api-vendas-products');
+    const product = await this.productsRepository.create({
       name,
       price,
       amount,
       description,
     });
-
-    await RedisCache.invalidate('api-vendas-products');
-    await productsRepository.save(product);
     return product;
   }
 }

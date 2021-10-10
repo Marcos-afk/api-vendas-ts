@@ -1,18 +1,19 @@
 import ErrorApp from '@shared/errors/ErrorApp';
-import { getCustomRepository } from 'typeorm';
-import CustomerRepository from '../infra/typeorm/repositories/CustomerRepository';
+import { ICustomersRepository } from '../domain/repositories/ICustomersRepository';
+import { inject, injectable } from 'tsyringe';
+import { IFindCustomer } from '../domain/models/IFindCustomer';
 
-interface IRequest {
-  id: string;
-}
-
+@injectable()
 export default class DeleteCustomerService {
-  public async execute({ id }: IRequest): Promise<void> {
-    const customerRepository = getCustomRepository(CustomerRepository);
-    const customer = await customerRepository.findOne(id);
+  constructor(
+    @inject('CustomersRepository')
+    private customersRepository: ICustomersRepository,
+  ) {}
+  public async execute({ id }: IFindCustomer): Promise<void> {
+    const customer = await this.customersRepository.findById(id);
     if (!customer) {
       throw new ErrorApp('Id inválido!');
     }
-    await customerRepository.remove(customer);
+    await this.customersRepository.remove(customer);
   }
 }

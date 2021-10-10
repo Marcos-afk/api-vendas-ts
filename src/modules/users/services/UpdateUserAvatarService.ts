@@ -1,21 +1,23 @@
-import ErrorApp from '@shared/errors/ErrorApp';
-import { getCustomRepository } from 'typeorm';
-import User from '../infra/typeorm/entities/User';
-import UsersRepository from '../infra/typeorm/repositories/UsersRepository';
 import uploadConfig from '@config/upload';
 import S3StorageProvider from '@shared/providers/storageProvider/S3StorageProvider';
 import DiskStorageProvider from '@shared/providers/storageProvider/DiskStorageProvider';
+import { inject, injectable } from 'tsyringe';
+import { IUsersRepository } from '../domain/repositories/IUsersRepository';
+import { IUpdateUserAvatar } from '../domain/models/IUpdateUserAvatar';
+import { IUser } from '../domain/models/IUser';
+import ErrorApp from 'dist/shared/errors/ErrorApp';
 
-interface IRequest {
-  avatarFilename: string;
-  userId: string;
-}
-
+@injectable()
 export default class UpdateUserAvatarService {
-  public async execute({ avatarFilename, userId }: IRequest): Promise<User> {
-    const usersRepository = getCustomRepository(UsersRepository);
-
-    const user = await usersRepository.findById(userId);
+  constructor(
+    @inject('UsersRepository')
+    private usersRepository: IUsersRepository,
+  ) {}
+  public async execute({
+    avatarFilename,
+    userId,
+  }: IUpdateUserAvatar): Promise<IUser> {
+    const user = await this.usersRepository.findById(userId);
     if (!user) {
       throw new ErrorApp('Id inválido');
     }
@@ -37,7 +39,7 @@ export default class UpdateUserAvatarService {
     }
 
     user.avatar = avatarFilename;
-    await usersRepository.save(user);
+    await this.usersRepository.save(user);
     return user;
   }
 }

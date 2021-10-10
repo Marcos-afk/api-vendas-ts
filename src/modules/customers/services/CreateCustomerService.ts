@@ -1,27 +1,26 @@
 import ErrorApp from '@shared/errors/ErrorApp';
-import { getCustomRepository } from 'typeorm';
-import Customer from '../infra/typeorm/entities/Customer';
-import CustomerRepository from '../infra/typeorm/repositories/CustomerRepository';
+import { inject, injectable } from 'tsyringe';
+import { ICreateCustomer } from '../domain/models/ICreateCustomer';
+import { ICustomer } from '../domain/models/ICustomer';
+import { ICustomersRepository } from '../domain/repositories/ICustomersRepository';
 
-interface IRequest {
-  name: string;
-  email: string;
-}
-
+@injectable()
 export default class CreateCustomerService {
-  public async execute({ name, email }: IRequest): Promise<Customer> {
-    const customersRepository = getCustomRepository(CustomerRepository);
-    const isExisting = await customersRepository.findByEmail(email);
+  constructor(
+    @inject('CustomersRepository')
+    private customersRepository: ICustomersRepository,
+  ) {}
+  public async execute({ name, email }: ICreateCustomer): Promise<ICustomer> {
+    const isExisting = await this.customersRepository.findByEmail(email);
     if (isExisting) {
       throw new ErrorApp('Email inválido!', 400);
     }
 
-    const customer = customersRepository.create({
+    const customer = await this.customersRepository.create({
       name,
       email,
     });
 
-    await customersRepository.save(customer);
     return customer;
   }
 }

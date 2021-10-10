@@ -1,23 +1,25 @@
 import EmailConfig from '@config/email';
 import ErrorApp from '@shared/errors/ErrorApp';
-import { getCustomRepository } from 'typeorm';
-import UsersRepository from '../infra/typeorm/repositories/UsersRepository';
-import UserTokensRepository from '../infra/typeorm/repositories/UserTokenRepository';
+import { inject, injectable } from 'tsyringe';
+import { ISendForgotPasswordEmail } from '../domain/models/ISendForgotPasswordEmail';
+import { IUsersRepository } from '../domain/repositories/IUsersRepository';
+import { IUserTokensRepository } from '../domain/repositories/IUserTokensRepository';
 
-interface IRequest {
-  email: string;
-}
-
+@injectable()
 export default class SendForgotPasswordService {
-  public async execute({ email }: IRequest): Promise<void> {
-    const usersRepository = getCustomRepository(UsersRepository);
-    const usersTokenRepository = getCustomRepository(UserTokensRepository);
-    const user = await usersRepository.findByEmail(email);
+  constructor(
+    @inject('UsersRepository')
+    private usersRepository: IUsersRepository,
+    @inject('UserTokensRepository')
+    private userTokensRepository: IUserTokensRepository,
+  ) {}
+  public async execute({ email }: ISendForgotPasswordEmail): Promise<void> {
+    const user = await this.usersRepository.findByEmail(email);
     if (!user) {
       throw new ErrorApp('Email inválido!');
     }
 
-    const token = await usersTokenRepository.generate(user.id);
+    const token = await this.userTokensRepository.generate(user.id);
     const EmailService = new EmailConfig();
     EmailService.to = email;
     EmailService.subject = 'Alteração de senha';

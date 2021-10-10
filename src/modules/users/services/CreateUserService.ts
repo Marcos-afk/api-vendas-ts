@@ -1,32 +1,32 @@
 import ErrorApp from '@shared/errors/ErrorApp';
-import { hash } from 'bcrypt';
-import { getCustomRepository } from 'typeorm';
-import User from '../infra/typeorm/entities/User';
-import UsersRepository from '../infra/typeorm/repositories/UsersRepository';
+import { inject, injectable } from 'tsyringe';
+import { IUsersRepository } from '../domain/repositories/IUsersRepository';
+import { IHashProvider } from '../providers/hashProviders/models/IHashPovider';
+import { ICreateuser } from '../domain/models/ICreateUser';
+import { IUser } from '../domain/models/IUser';
 
-interface IRequest {
-  name: string;
-  email: string;
-  password: string;
-}
-
+@injectable()
 export default class CreateUserService {
-  public async execute({ name, email, password }: IRequest): Promise<User> {
-    const usersRepository = getCustomRepository(UsersRepository);
-    const isExisting = await usersRepository.findByEmail(email);
+  constructor(
+    @inject('UsersRepository')
+    private usersRepository: IUsersRepository,
+    @inject('HashProvider')
+    private hashProvider: IHashProvider,
+  ) {}
+  public async execute({ name, email, password }: ICreateuser): Promise<IUser> {
+    const isExisting = await this.usersRepository.findByEmail(email);
     if (isExisting) {
       throw new ErrorApp('Email inválido!', 400);
     }
 
-    const hashPassword = await hash(password, 8);
+    const hashPassword = await this.hashProvider.generateHash(password);
 
-    const user = usersRepository.create({
+    const user = await this.usersRepository.create({
       name,
       email,
       password: hashPassword,
     });
 
-    await usersRepository.save(user);
     return user;
   }
 }

@@ -9,6 +9,7 @@ import dotenv from 'dotenv';
 import Routes from './routes/index';
 import ErrorApp from '@shared/errors/ErrorApp';
 import '@shared/infra/typeorm';
+import '@shared/container/index';
 import uploadsConfig from '@config/upload';
 import ratelimiter from './middlewares/rateLimiter';
 const app = express();
