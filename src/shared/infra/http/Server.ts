@@ -4,7 +4,6 @@ import express, { NextFunction, Request, Response } from 'express';
 import 'express-async-errors';
 import cors from 'cors';
 import { errors } from 'celebrate';
-import { pagination } from 'typeorm-pagination';
 import dotenv from 'dotenv';
 import Routes from './routes/index';
 import ErrorApp from '@shared/errors/ErrorApp';
@@ -20,7 +19,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(ratelimiter);
 
-app.use(pagination);
 app.use('/files', express.static(uploadsConfig.directory));
 
 app.use('/api', Routes);
