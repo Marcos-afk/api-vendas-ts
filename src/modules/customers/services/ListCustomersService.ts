@@ -1,7 +1,7 @@
 import { ICustomer } from '../domain/models/ICustomer';
 import { ICustomersRepository } from '../domain/repositories/ICustomersRepository';
 import { inject, injectable } from 'tsyringe';
-import ErrorApp from 'dist/shared/errors/ErrorApp';
+import ErrorApp from '@shared/errors/ErrorApp';
 
 @injectable()
 export default class ListCustomersService {
@@ -11,7 +11,7 @@ export default class ListCustomersService {
   ) {}
   public async execute(): Promise<ICustomer[] | undefined> {
     const customers = await this.customersRepository.find();
-    if (customers && customers.length < 1) {
+    if (customers) {
       throw new ErrorApp('Lista de clientes vazia!');
     }
 
