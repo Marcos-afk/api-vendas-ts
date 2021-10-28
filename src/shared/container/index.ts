@@ -9,7 +9,7 @@ import { IUsersRepository } from '@modules/users/domain/repositories/IUsersRepos
 import UsersRepository from '@modules/users/infra/typeorm/repositories/UsersRepository';
 import UserTokensRepository from '@modules/users/infra/typeorm/repositories/UserTokenRepository';
 import { IUserTokensRepository } from '@modules/users/domain/repositories/IUserTokensRepository';
-import { IHashProvider } from '@modules/users/providers/hashProviders/models/IHashPovider';
+import { IHashProvider } from '@modules/users/providers/hashProviders/models/IHashProvider';
 import BcryptHashProvider from '@modules/users/providers/hashProviders/implementations/BcryptHashProvider';
 
 container.registerSingleton<ICustomersRepository>(

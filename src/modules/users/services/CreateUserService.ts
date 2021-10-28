@@ -1,8 +1,8 @@
 import ErrorApp from '@shared/errors/ErrorApp';
 import { inject, injectable } from 'tsyringe';
 import { IUsersRepository } from '../domain/repositories/IUsersRepository';
-import { IHashProvider } from '../providers/hashProviders/models/IHashPovider';
-import { ICreateuser } from '../domain/models/ICreateUser';
+import { IHashProvider } from '../providers/hashProviders/models/IHashProvider';
+import { ICreateUser } from '../domain/models/ICreateUser';
 import { IUser } from '../domain/models/IUser';
 
 @injectable()
@@ -13,7 +13,7 @@ export default class CreateUserService {
     @inject('HashProvider')
     private hashProvider: IHashProvider,
   ) {}
-  public async execute({ name, email, password }: ICreateuser): Promise<IUser> {
+  public async execute({ name, email, password }: ICreateUser): Promise<IUser> {
     const isExisting = await this.usersRepository.findByEmail(email);
     if (isExisting) {
       throw new ErrorApp('Email inválido!', 400);

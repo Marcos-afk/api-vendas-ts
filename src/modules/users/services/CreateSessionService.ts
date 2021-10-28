@@ -3,7 +3,7 @@ import { Secret, sign } from 'jsonwebtoken';
 import authConfig from '@config/auth';
 import { inject, injectable } from 'tsyringe';
 import { IUsersRepository } from '../domain/repositories/IUsersRepository';
-import { IHashProvider } from '../providers/hashProviders/models/IHashPovider';
+import { IHashProvider } from '../providers/hashProviders/models/IHashProvider';
 import { ICreateSession } from '../domain/models/ICreateSession';
 import { IUserAuthenticated } from '../domain/models/IUserAuthenticated';
 
