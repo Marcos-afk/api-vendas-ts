@@ -32,6 +32,7 @@
 - [Heroku Redis](https://devcenter.heroku.com/articles/heroku-redis)
 - [Mongoose](https://www.npmjs.com/package/mongoose)
 - [Class-transformer](https://www.npmjs.com/package/class-transformer)
+- [Jest](https://jestjs.io/pt-BR/)
 
 Obs.: Algumas ferramentas precisaram da instalação do @Types referentes a elas para que funcionem, por exemplo : @types/cors.
 
@@ -66,3 +67,4 @@ npm run dev
 - [x] Cache com Redis
 - [x] Upload utilizando Aws
 - [x] Envio de email's
+- [x] Testes automatizados
